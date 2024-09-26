@@ -1,0 +1,22 @@
+services:
+  vault:
+    hostname: vault
+    container_name: vault
+    image: hashicorp/vault
+    ports:
+      - 8200:8200
+      - 8201:8201
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/vault/logs:rw
+      - ./certs:/certs/:rw
+      - ./config:/vault/config/:rw
+      - ./file:/vault/file/:rw
+      - vault-data:/vault/data
+    cap_add:
+      - IPC_LOCK
+    entrypoint: vault server -config /vault/config/config.hcl
+volumes:
+  vault-data:
